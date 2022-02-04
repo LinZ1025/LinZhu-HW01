@@ -70,3 +70,13 @@ The variable **astrolgy** indicates if the respondents have ever read a horoscop
 CrossTable(gss$astrolgy, gss$sex, prop.r=F, prop.c=T, prop.t=F, prop.chisq=F, format="SPSS")
 ```
 There are 1862 people who had valid responses to both of these two questions. The results in the above table support my hypothesis -- 65.345% of women have read a horoscope while 52.553% of men say they haven't. I did some research and found out that astrology is well received among women because it is a mode of communication. As for some men who don't believe in astrology, the problem is there is no solid scientific basis to it.
+
+
+
+```{r}
+library(gmodels)
+library(plyr)
+library(gmodels)
+```
+
+
