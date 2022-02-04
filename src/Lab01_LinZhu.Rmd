@@ -1,0 +1,80 @@
+---
+title: "Lab01_LinZhu"
+output:
+  html_document: default
+  pdf_document: default
+---
+## Lab 1
+
+
+Lab1 is based on data from here:  http://www.thearda.com/Archive/Files/Codebooks/GSS2006_CB.asp
+
+
+```{r}
+## read the file
+gss <- read.csv("GSS.2006.csv.xls")
+library(ggplot2)
+library(doBy)
+library(plyr)
+library(gmodels)
+```
+
+#### 1.  Use the table command, summary or describe commands, to tabulate one variable; and explain your results.
+
+I decided to look at the variable **satjob** that indicates the respondent's level of agreement to this statement: how satisfied would you say you are with your job?   
+
+![](/Users/zhulin/Desktop/💙Columbia/💙Fall2021/DA/Lab/Lab1/R/satjob.png){width=80% height=80%}
+
+```{r}
+## tabulate SATJOB: "how satisfied would you say you are with your job?"
+table(gss$satjob)
+
+```
+From the Codebook, valid answers range from 1 to 4 (1 = Very satisfied, 2 = Moderately satisfied, 3 = A little dissatisfied, 4 = Very dissatisfied). The results above suggest that 1073 interviewees were very satisfied with their jobs while only 89 were very dissatisfied. 
+
+```{r}
+## Proportions
+round(prop.table(table(gss$satjob)),3)
+## histogram
+p = ggplot(gss, aes(x = satjob)) + geom_histogram(color = "pink", fill = "white")
+p
+```
+\
+
+Here we can also see that the majority of American workers surveyed are either somewhat or very happy with their jobs (43.9% very satisfied and 37.8% moderately satisfied) while only 4.1% said they were very dissatisfied with their jobs. It is reassuring that the vast majority of employees are generally happy in their roles since happiness increases productivity and leads to higher engagement.   
+
+#### 2. Using either the plyr or doBy commands, compare the means and standard deviations for one variable, for at least two subgroups and explain your results. 
+
+For Question two, I take a look at the variable **hlthdays** meaning during the last 30 days, for how many days the interviewees found their poor physical or mental health kept them from doing their usual activities, such as self-care, work or recreation. The valid answers range from 0 days to 30 days. I looked at the mean, median, minimum, maximum of poor mental health days and standard deviations, by **race**. From the Codebook, race1 = White, race2 = Black, race3 = Other.  
+![](/Users/zhulin/Desktop/💙Columbia/💙Fall2021/DA/Lab/Lab1/R/hlthdays.png){width=80% height=80%}
+
+
+
+![](/Users/zhulin/Desktop/💙Columbia/💙Fall2021/DA/Lab/Lab1/R/race.png){width=35% height=35%}
+```{r}
+## Key descriptive statistics of hlthdays, by race
+summaryBy(hlthdays~race, data=gss, FUN=c(mean, median, sd, min, max), na.rm=T)
+
+#distribution 
+summaryBy(hlthdays~race, data=gss, FUN=c(length))
+```
+I chose these variables because I want to understand the racial differences in mental and physical health mainly between black and white, since I don't have the breakdowns for race3. As the tables above show, all the races have a median and minimum of 0 days. White report an average of 1.24 days with a standard deviation of 4.06 days, while black report an average of 1.00 days with a standard deviation of 4.00 days. The standard deviations of around 4.0 for both races indicate how spread out numbers of unhealthy days are. Also, please note that there are largely more white respondents (3284) than black respondents (634).In short, judging from the responses and data above, one thing is clear that white respondents are more likely to experience more "unhealthy days" that keep them from doing daily activities. 
+
+#### 3. Using the gmodels or another command, crosstabulate two categorical or ordinal variables (getting proportions); and explain your results.
+The variable **astrolgy** indicates if the respondents have ever read a horoscope or personal astrology report ( 1 = Yes, 2 = No).I chose this variable because I do pay special attention to my horoscope especially when something is changing. I wanted to cross-tabulate **astrolgy** with **sex**, hypothesizing that astrology is more prevalent among women than men since astrology is typically advertised towards a feminine population through social media.  
+![](/Users/zhulin/Desktop/💙Columbia/💙Fall2021/DA/Lab/Lab1/R/Screen Shot 2021-10-04 at 11.57.09 PM.png){width=45% height=45%}  
+![](/Users/zhulin/Desktop/💙Columbia/💙Fall2021/DA/Lab/Lab1/R/Screen Shot 2021-10-04 at 11.57.30 PM.png){width=20% height=20%}  
+
+```{r}
+##library(gmodels)
+CrossTable(gss$astrolgy, gss$sex, prop.r=F, prop.c=T, prop.t=F, prop.chisq=F, format="SPSS")
+```
+There are 1862 people who had valid responses to both of these two questions. The results in the above table support my hypothesis -- 65.345% of women have read a horoscope while 52.553% of men say they haven't. I did some research and found out that astrology is well received among women because it is a mode of communication. As for some men who don't believe in astrology, the problem is there is no solid scientific basis to it.
+
+
+```{r}
+library(gmodels)
+library(plyr)
+library(gmodels)
+```
+
